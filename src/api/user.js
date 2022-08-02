@@ -8,10 +8,15 @@ export const login = data => {
   })
 }
 
-export function getInfo(token) {
-
+export const getUserInfo = () => {
+  return request({
+    url: '/sys/profile',
+    method: 'post'
+  })
 }
 
-export function logout() {
-
+export function userInfo(id) {
+  return request({
+    url: `/sys/user/${id}`
+  })
 }
