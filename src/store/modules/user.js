@@ -1,4 +1,5 @@
 import { login, getUserInfo, userInfo } from "@/api/user";
+import {setTokenTime} from '@/utils/auth'
 export default {
   namespaced: true,
   state: {
@@ -12,14 +13,12 @@ export default {
     setUserInfo(state, payload) {
       state.userInfo = payload;
     },
-    logout(state) {
-      state.token = null;
-    },
   },
   actions: {
     async getToken(context, data) {
       const res = await login(data);
       context.commit("getToken", res);
+      setTokenTime();
     },
     async getUserInfo(context) {
       const res = await getUserInfo();
@@ -27,7 +26,8 @@ export default {
       context.commit("setUserInfo", { ...res, ...user });
     },
     logout(context) {
-      context.commit("logout");
+      context.commit("getToken", "");
+      context.commit("setUserInfo", {});
     },
   },
 };
