@@ -1,9 +1,16 @@
 <template>
-  <div>name</div>
+  <div>
+    <i
+      @click="
+        $router.push('/employees/print?type=jobInfo')
+      "
+      class="el-icon-printer"
+    />
+  </div>
 </template>
 <script>
 export default {
-  name: 'index',
+  name: 'job-info',
   props: {},
   data() {
     return {}

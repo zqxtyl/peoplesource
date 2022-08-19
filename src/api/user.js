@@ -20,3 +20,5 @@ export function userInfo(id) {
     url: `/sys/user/${id}`
   })
 }
+
+

@@ -1,72 +1,91 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <el-card class="tree-card" v-loading='loading'>
-        <!-- 用了一个行列布局 -->
-        <TreeTools @add="addShow" :isRoot="true" :treeNode="company" />
-        <!-- 树形 -->
-        <el-tree :data="treeData" :props="defaultProps" default-expand-all>
+      <el-card class="card-container" 
+      v-loading='loading'
+      >
+        <!-- 头部 -->
+        <treeTools :treeNode="company" />
+        <el-tree
+          @add="showAddDpet"
+          :isRoot="false"
+          :data="treeData"
+          :props="defaultProps"
+          default-expand-all
+        >
           <template v-slot="{ data }">
-            <TreeTools @isEdit='showEdit' @add="addShow" @remove="loadDepts" :treeNode="data" />
+            <treeTools
+              @add="showAddDpet"
+              :treeNode="data"
+              @remove="getDepts"
+              @edit="editDepts" 
+              
+            />
           </template>
         </el-tree>
       </el-card>
     </div>
-    <!-- 弹层组件 -->
-    <add-dept ref="addDept" @onSuccess='loadDepts' :isShow.sync="isShow" :currentDate="currentDate" />
+    <add-dept
+      ref="addDept"
+      :visible.sync="dialogVisible"
+      :currentDept="currentDept"
+    />
   </div>
 </template>
-
 <script>
-import TreeTools from "./components/treeTools.vue";
-import { getDepts } from "@/api/departments";
-import { transListToTree } from "@/utils/index";
-import AddDept from "./components/addDept.vue";
+import treeTools from './components/tree-tools'
+import AddDept from './components/add-dept'
+import { getDeptsApi } from '@/api/departments'
+import { fn } from '@/utils'
 export default {
   data() {
     return {
-      treeData: [],
       defaultProps: {
-        label: "name",
+        label: 'name',
       },
-      company: { name: "传智教育", manager: "负责人" },
-      isShow: false,
-      currentDate: {},
-      loading:false
-    };
+      treeData: [
+        {
+          name: '总裁办',
+          children: [{ name: '董事会' }],
+        },
+        { name: '行政部' },
+        { name: '人事部' },
+      ],
+      company: { name: '总裁办', manager: '负责人' },
+      dialogVisible: false,
+      currentDept: '',
+      currentNode:'',
+      loading:false,
+    }
   },
-
   created() {
-    this.loadDepts();
+    this.getDepts()
   },
-
   methods: {
-    async loadDepts() {
-      this.loading=true
-      const res = await getDepts();
-      console.log(res);
-      this.treeData = transListToTree(res.depts, "");
-      this.loading=false
+    async getDepts() {
+      this.loading = true
+      const res = await getDeptsApi()
+      console.log(res)
+      this.treeData = fn(res.depts, '')
+      this.loading = false
     },
-    addShow(val) {
-      this.isShow = true;
-      this.currentDate = val;
+    showAddDpet(val) {
+      this.currentDept = val
+      console.log(this.currentDept)
+      this.dialogVisible = true
     },
-    showEdit(val){
-      this.isShow=true
-      this.$refs.addDept.getDeptById(val.id)
+    editDepts(node) {
+     console.log(node);
+     this.dialogVisible = true
+     this.$refs.addDept.showDept(node.id)
+    //  this.currentNode = node // 赋值操作的节点
     }
   },
   components: {
-    TreeTools,
+    treeTools,
     AddDept,
   },
-};
+}
 </script>
 
-<style scoped>
-.tree-card {
-  padding: 30px 140px;
-  font-size: 14px;
-}
-</style>
+<style scoped lang="less"></style>

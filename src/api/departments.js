@@ -1,39 +1,51 @@
 import request from '@/utils/request'
-// 获取列表
-export const getDepts=()=>{
-    return request({
-        url:'/company/department'
-    })
-}
 
-// 删除
-export const deleteDepts=(id)=>{
-    return request({
-        url:`/company/department/${id}`,
-        method:'delete'
-    })
+// 获取组织架构
+export function getDeptsApi(){
+	return request({
+		url:'/company/department'
+	})
 }
-// 新增部门
-export const addDepartment = (data) => {
-    return request({
-      url: '/company/department',
-      method: 'post',
-      data
-    })
+/** *
+ *  根据id根据部门  接口是根据restful的规则设计的   删除 delete  新增 post  修改put 获取 get
+ * **/
+ export function delDepart(id) {
+	return request({
+	  url: `/company/department/${id}`,
+	  method: 'delete'
+	})
   }
 
-  // 根据id获取部门详情
-  export const getDeptById=(id)=>{
-    return request({
-        url:`/company/department/${id}`
-    })
+  /**
+ * 添加部门
+ * @param {*} data
+ * @returns promise
+ */
+export function addDepartment(data) {
+	return request({
+	  url: '/company/department',
+	  method: 'POST',
+	  data
+	})
   }
 
-  // 更改部门
-export const updateDepartment = (data) => {
-  return request({
-    url: `/company/department/${data.id}`,
-    method: 'put',
-    data
-  })
-}
+/** *
+ * 获取部门详情
+ * ***/
+ export function getDepartDetail(id) {
+	return request({
+	  url: `/company/department/${id}`
+	})
+  }
+
+ /**
+ * 编辑部门
+ *
+ * ***/
+export function updateDepartments(data) {
+	return request({
+	  url: `/company/department/${data.id}`,
+	  method: 'put',
+	  data
+	})
+  } 
