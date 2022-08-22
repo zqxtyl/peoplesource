@@ -1,49 +1,57 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <UploadExcel
-        :beforeUpload="excelSuccess"
-        :onSuccess="onSuccess"
-      />
+      <UploadExcel :beforeUpload='beforeUpload' :onSuccess='onSuccess'></UploadExcel>
     </div>
   </div>
 </template>
+
 <script>
-import employees from '@/constant/employees.js'
-import { importEmployee } from '@/api/employees'
-const { importEmployeesMapKeyPath } = employees
+import { formatTime } from '@/filters'
+import { importEmployeeApi } from '@/api/employees'
+import employees from '@/constant/employees'
+const { importMapKeyPath } = employees
 export default {
-  name: 'import',
-  props: {},
   data() {
-    return {}
+    return {
+      importMapKeyPath,
+    }
   },
+
   created() {},
+
   methods: {
-    excelSuccess({ name }) {
-      if (!name.endsWith('.xlsx')) {
-        this.$message.error('请选择xlsx文件')
-        return false
+    beforeUpload({ name }) {
+      if (name.endsWith('.xlsx')) {
+        return true
       }
-      return true
+      this.$message.error('请选择正确的文件')
+      return false
     },
     async onSuccess({ header, results }) {
-      const newArr = results.map(item => {
-        let obj = {}
-        for (let k in importEmployeesMapKeyPath) {
-          obj[importEmployeesMapKeyPath[k]] = item[k]
+      //   console.log(header, results)
+      const newArr = results.map((item) => {
+        const obj = {}
+        for (let key in item) {
+          if (key === '入职日期' || key === '转正日期') {
+            const timestamp = item[key]
+            // 转换
+            const date = new Date((timestamp - 1) * 24 * 3600000)
+            date.setFullYear(date.getFullYear() - 70)
+            obj[importMapKeyPath[key]] = formatTime(date)
+          } else {
+            obj[importMapKeyPath[key]] = item[key]
+          }
         }
         return obj
       })
-      await importEmployee(newArr)
+      console.log(newArr)
+      await importEmployeeApi(newArr)
       this.$message.success('导入成功')
-      this.$router.go(-1)
+      this.$router.back(1)
     },
   },
-  computed: {},
-  watch: {},
-  mounted() {},
-  components: {},
 }
 </script>
+
 <style scoped lang="less"></style>

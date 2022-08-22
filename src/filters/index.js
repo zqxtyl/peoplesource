@@ -1,4 +1,4 @@
 import dayjs from 'dayjs'
-export const formatTime = (val) => {
-	return dayjs(val).format('YYYY-MM-DD')
+ export const formatTime = (value)=>{
+  return dayjs(value).format('YYYY-MM-DD')
 }

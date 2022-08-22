@@ -1,26 +1,19 @@
 <template>
   <div class="dashboard-container" id="myPrint">
-    <el-button v-print="'myPrint'">打印</el-button>
     <div class="app-container">
+    <el-button v-print="'#myPrint'">打印</el-button>
+
       <el-card>
         <el-breadcrumb separator="/" class="titInfo">
-          <el-breadcrumb-item :to="{ path: '/' }"
-            >首页</el-breadcrumb-item
-          >
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>
-            <router-link :to="{ path: '/employees' }"
-              >员工管理</router-link
-            >
+            <router-link :to="{ path: '/employees' }">员工管理</router-link>
           </el-breadcrumb-item>
           <el-breadcrumb-item>打印</el-breadcrumb-item>
         </el-breadcrumb>
         <div v-if="type === 'personal'">
           <h2 class="centInfo">员工信息表</h2>
-          <table
-            cellspacing="0"
-            width="100%"
-            class="tableList"
-          >
+          <table cellspacing="0" width="100%" class="tableList">
             <tr class="title">
               <td colspan="8" class="centInfo">
                 基本信息
@@ -32,10 +25,7 @@
                 {{ formData.username }}
               </td>
               <td rowspan="5" style="width: 10%">
-                <img
-                  style="width: 155px; height: 218px"
-                  :src="formData.staffPhoto"
-                />
+                <img style="width: 155px; height: 218px" :src="formData.staffPhoto" />
               </td>
             </tr>
             <tr>
@@ -307,11 +297,7 @@
         </div>
         <div v-else>
           <h2 class="centInfo">岗位信息表</h2>
-          <table
-            cellspacing="0"
-            width="100%"
-            class="tableList"
-          >
+          <table cellspacing="0" width="100%" class="tableList">
             <tr class="title">
               <td colspan="4" class="centInfo">
                 基本信息
@@ -459,10 +445,9 @@
     </div>
   </div>
 </template>
-
 <script>
-import { getPersonalDetail } from '@/api/employees'
-import { userInfo } from '@/api/user'
+import { getPersonalDetailApi } from '@/api/employees'
+import { getUserDetailInfoApi } from '@/api/user'
 export default {
   data() {
     return {
@@ -473,19 +458,17 @@ export default {
   },
   // 创建完毕状态
   created() {
-    this.type === 'personal'
-      ? this.getPersonalDetail()
-      : this.getJobDetail()
+    this.type === 'personal' ? this.getPersonalDetail() : this.getJobDetail()
   },
   // 组件更新
   methods: {
     async getPersonalDetail() {
-      this.formData = await getPersonalDetail(this.userId) // 获取个人基本信息
+      this.formData = await getPersonalDetailApi(this.userId) // 获取个人基本信息
     },
     async getJobDetail() {
-      const UserInfo = await userInfo(this.userId)
+      const userInfo = await getUserDetailInfoApi(this.userId)
       const jobInfo = await getJobDetail(this.userId) // 获取个人基本信息
-      this.formData = { ...UserInfo, ...jobInfo }
+      this.formData = { ...userInfo, ...jobInfo }
     },
   },
 }

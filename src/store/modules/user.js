@@ -1,33 +1,52 @@
-import { login, getUserInfo, userInfo } from "@/api/user";
-import {setTokenTime} from '@/utils/auth'
+import {getUserDetailInfoApi, getUserInfoApi, login} from '@/api/user';
+import { setTokenTime } from '@/utils/auth';
+import {resetRouter} from '@/router'
+
+const getDefaultState = () => {
+  return {
+    token:'',
+    userInfo:{}
+  }
+}
+
+const state = getDefaultState()
+
+const mutations = {
+  SETTOKEN(state,paylod){
+    state.token=paylod
+    setTokenTime()
+  },
+  GETUSERINFO(state,info){
+    state.userInfo=info
+  }
+}
+
+const actions = {
+ async setToken(context,payload){
+    const data = await login(payload)
+    console.log(data)
+    context.commit('SETTOKEN',data)
+  },
+  async  getUserInfo(context){
+   const UserBaseInfo =await getUserInfoApi()
+   const UserDetailInfo = await getUserDetailInfoApi(UserBaseInfo.userId)
+   context.commit('GETUSERINFO',{...UserBaseInfo,...UserDetailInfo})
+   // action 通过return将数据传递出去，类似permission中的then
+   return UserBaseInfo
+  },
+  // 退出
+  logout(context){
+    context.commit('SETTOKEN','')
+    context.commit('GETUSERINFO',{})
+    resetRouter()
+    context.commit('permission/setRoles',[],{root:true})
+  }
+}
+
 export default {
   namespaced: true,
-  state: {
-    token: "",
-    userInfo: {},
-  },
-  mutations: {
-    getToken(state, payload) {
-      state.token = payload;
-    },
-    setUserInfo(state, payload) {
-      state.userInfo = payload;
-    },
-  },
-  actions: {
-    async getToken(context, data) {
-      const res = await login(data);
-      context.commit("getToken", res);
-      setTokenTime();
-    },
-    async getUserInfo(context) {
-      const res = await getUserInfo();
-      const user = await userInfo(res.userId);
-      context.commit("setUserInfo", { ...res, ...user });
-    },
-    logout(context) {
-      context.commit("getToken", "");
-      context.commit("setUserInfo", {});
-    },
-  },
-};
+  state,
+  mutations,
+  actions
+}
+

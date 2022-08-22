@@ -116,22 +116,16 @@ export function param2Obj(url) {
   return obj
 }
 
-/**
- * 
- * @param {*} data 要处理的数据
- * @param {*} pid  父级的id
- * @returns 
- */
-export  function fn(data, pid) {
-  const arr = [];
-  data.forEach((item) => {
-    if (item.pid === pid) {
-      const children = fn(data, item.id);
+export  function transListToTree(data, pid) {
+   const arr = [];
+    data.forEach((item) => {
+      if (item.pid === pid) {
+      const children = transListToTree(data, item.id);
       if (children.length) {
-        item.children = children;
+    item.children = children;
       }
       arr.push(item);
-    }
-  });
-  return arr;
-}
+      }
+    });
+    return arr;
+  }

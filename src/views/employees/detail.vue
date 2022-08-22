@@ -2,91 +2,70 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card>
-        <el-tabs
-          v-model="activeName"
-          @tab-click="handleClick"
-        >
-          <el-tab-pane label="登录账户设置" name="first">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="登录账户设置" name="account">
+
             <!-- 放置表单 -->
-            <el-form
-              label-width="120px"
-              style="margin-left: 120px; margin-top: 30px"
-              :model="formData"
-            >
+            <el-form label-width="120px" style="margin-left: 120px; margin-top:30px">
               <el-form-item label="姓名:">
-                <el-input
-                  style="width: 300px"
-                  v-model="formData.username"
-                />
+                <el-input v-model="formData.username" style="width:300px" />
               </el-form-item>
               <el-form-item label="密码:">
-                <el-input
-                  style="width: 300px"
-                  type="password"
-                  v-model="formData.password"
-                />
+                <el-input v-model="formData.password" style="width:300px" type="password" />
               </el-form-item>
               <el-form-item>
-                <el-button
-                  type="primary"
-                  @click="saveUser"
-                  >更新</el-button
-                >
+                <el-button type="primary" @click="onSave">更新</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="个人详情" name="second">
-            <userInfo1 />
+          <el-tab-pane label="个人详情" name="user">
+            <UserInfo></UserInfo>
           </el-tab-pane>
-          <el-tab-pane label="岗位信息" name="third">
-            <jobInfo />
-          </el-tab-pane>
+          <el-tab-pane label="岗位信息" name="info" />
+            <JobInfo></JobInfo>
         </el-tabs>
       </el-card>
     </div>
   </div>
 </template>
 <script>
-import { userInfo } from '@/api/user'
-import { saveUserDetailById } from '@/api/employees'
-import userInfo1 from './components/user-info'
+import UserInfo from './components/user-info.vue'
+import JobInfo from './components/job-info.vue'
+import { getUserDetailInfoApi, saveUserDetailInfoApi } from '@/api/user'
 import Cookies from 'js-cookie'
-import jobInfo from './components/job-info'
 export default {
-  name: 'detail',
-  props: {},
+  name: '',
   data() {
     return {
-      activeName: Cookies.get('active') || 'first',
-      formData: {},
+      activeName: Cookies.get('activeNameTab') || 'account',
+      formData: {
+        username: '',
+        password: '',
+      },
     }
   },
-  created() {
-    this.loadFormData()
-  },
-  methods: {
-    async loadFormData() {
-      const res = await userInfo(this.$route.params.id)
-      console.log(res)
-      this.formData = res
-    },
-    async saveUser() {
-      try {
-        // 校验
-        await saveUserDetailById(this.formData) // 将新密码的值替换原密码的值
-        this.$message.success('保存成功')
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    handleClick() {
-      Cookies.set('active', this.activeName)
-    },
-  },
+  components: { UserInfo, JobInfo },
   computed: {},
-  watch: {},
+  created() {
+    this.getUserDetailInfo()
+  },
   mounted() {},
-  components: { userInfo1, jobInfo },
+  methods: {
+    async getUserDetailInfo() {
+      const data = await getUserDetailInfoApi(this.$route.params.id)
+      // console.log(data)
+      this.formData = data
+    },
+    async onSave() {
+      await saveUserDetailInfoApi(this.formData)
+      this.$message.success('更新成功')
+    },
+    handleClick(val) {
+      Cookies.set('activeNameTab', this.activeName)
+    },
+  },
+  watch: {},
 }
 </script>
-<style scoped lang="less"></style>
+<style lang='less' scoped>
+</style>

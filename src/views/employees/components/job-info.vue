@@ -1,26 +1,21 @@
 <template>
   <div>
-    <i
-      @click="
-        $router.push('/employees/print?type=jobInfo')
-      "
-      class="el-icon-printer"
-    />
+    <i class="el-icon-printer" @click="$router.push('/employees/print?type=jobinfo')"></i>
   </div>
 </template>
 <script>
 export default {
-  name: 'job-info',
-  props: {},
+  name: '',
   data() {
     return {}
   },
-  created() {},
-  methods: {},
-  computed: {},
-  watch: {},
-  mounted() {},
   components: {},
+  computed: {},
+  created() {},
+  mounted() {},
+  methods: {},
+  watch: {},
 }
 </script>
-<style scoped lang="less"></style>
+<style lang='less' scoped>
+</style>

@@ -1,69 +1,58 @@
 import request from '@/utils/request'
 
+
+export function getEmployeesSimpleApi() {
+    return request({
+      url: '/sys/user/simple'
+    })
+  }
+
+
+export function getAddDepartmentApi(params) {
+    return request({
+      url: '/company/department',
+      method:'POST',
+      params
+    })
+  }
 /**
- *  获取员工的简单列表
- * **/
-export function getEmployeeSimple() {
-  return request({
-    url: '/sys/user/simple'
-  })
-}
+ * 获取员工列表
+ * @param {*} params {page ,size} 
+ * @returns 
+ */
+  export function getEmployeesListApi(params) {
+    return request({
+      url: '/sys/user',
+      params
+    })
+  }
+  export function getDeleteEmployeesApi(id) {
+    return request({
+      url: '/sys/user/'+id,
+      method:"DELETE"
+    })
+  }
 
-
-/**
- * 获取员工的综合列表数据
- * ***/
- export function getEmployeeInfoApi(params) {
-  return request({
-    url: '/sys/user',
-    params
-  })
-}
-
-/**
- * 删除员工接口
- * ****/
-
- export function delEmployee(id) {
-  return request({
-    url: `/sys/user/${id}`,
-    method: 'delete'
-  })
-}
 
 /** **
  *  新增员工的接口
  * **/
- export function addEmployee(data) {
+ export function addEmployeeApi(data) {
   return request({
     method: 'post',
     url: '/sys/user',
     data
   })
 }
-
-
-/** *
- *  封装一个导入员工的接口
- *
- * ***/
-
- export function importEmployee(data) {
+/**
+ * 
+ * @param {*} data 员工数组
+ * @returns 
+ */
+export function importEmployeeApi(data){
   return request({
-    url: '/sys/user/batch',
-    method: 'post',
-    data
-  })
-}
-
-/** *
- *
- * 保存员工的基本信息
- * **/
- export function saveUserDetailById(data) {
-  return request({
-    url: `/sys/user/${data.id}`,
-    method: 'put',
+    method:'POST',
+    url:'/sys/user/batch',
     data
   })
 }
@@ -71,7 +60,7 @@ export function getEmployeeSimple() {
 /** *
  *  读取用户详情的基础信息
  * **/
- export function getPersonalDetail(id) {
+ export function getPersonalDetailApi(id) {
   return request({
     url: `/employees/${id}/personalInfo`
   })
@@ -80,10 +69,10 @@ export function getEmployeeSimple() {
 /** *
  *  更新用户详情的基础信息
  * **/
- export function updatePersonal(data) {
+ export function updatePersonalApi(data) {
   return request({
     url: `/employees/${data.userId}/personalInfo`,
     method: 'put',
-    data
+    data,
   })
 }

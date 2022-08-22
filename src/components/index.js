@@ -1,11 +1,13 @@
-import pageTools from '@/components/myPageTools/pageTools'
-import UploadExcel from './upLoadExcel'
+import PageTools from './PageTools'
+import UploadExcel from "./UploadExcel"
 import UploadImg from './UploadImg'
-const components = [pageTools,UploadExcel ,UploadImg]
-export default{
-	install(Vue){
-		components.forEach(component => {
-	 	   Vue.component(component.name,component)
-	 })
-	}
+const components =[PageTools,UploadExcel,UploadImg]
+export default {
+    install(Vue){
+        components.forEach(component=>{
+            Vue.component(component.name,component)
+        
+        })
+
+    }
 }
