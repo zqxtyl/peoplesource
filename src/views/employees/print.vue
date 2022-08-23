@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container" id="myPrint">
-    <div class="app-container">
+    <!-- v-print的值应该是一个字符串(选择器), 对应的就会将该选择器中的内容进行打印 -->
     <el-button v-print="'#myPrint'">打印</el-button>
-
+    <div class="app-container">
       <el-card>
         <el-breadcrumb separator="/" class="titInfo">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -11,21 +11,21 @@
           </el-breadcrumb-item>
           <el-breadcrumb-item>打印</el-breadcrumb-item>
         </el-breadcrumb>
+        <!-- 用户-详情 -->
         <div v-if="type === 'personal'">
           <h2 class="centInfo">员工信息表</h2>
           <table cellspacing="0" width="100%" class="tableList">
             <tr class="title">
-              <td colspan="8" class="centInfo">
-                基本信息
-              </td>
+              <td colspan="8" class="centInfo">基本信息</td>
             </tr>
             <tr>
               <th style="width: 10%">姓名</th>
-              <td colspan="6" style="width: 80%">
-                {{ formData.username }}
-              </td>
+              <td colspan="6" style="width: 80%">{{ formData.username }}</td>
               <td rowspan="5" style="width: 10%">
-                <img style="width: 155px; height: 218px" :src="formData.staffPhoto" />
+                <img
+                  style="width: 155px; height: 218px"
+                  :src="formData.staffPhoto"
+                />
               </td>
             </tr>
             <tr>
@@ -38,21 +38,15 @@
             </tr>
             <tr>
               <th>出生日期</th>
-              <td colspan="6">
-                {{ formData.dateOfBirth | formatTime }}
-              </td>
+              <td colspan="6">{{ formData.dateOfBirth | formatTime }}</td>
             </tr>
             <tr>
               <th>最高学历</th>
-              <td colspan="6">
-                {{ formData.theHighestDegreeOfEducation }}
-              </td>
+              <td colspan="6">{{ formData.theHighestDegreeOfEducation }}</td>
             </tr>
             <tr>
               <th style="width: 10%">是否可编辑</th>
-              <td style="width: 35%">
-                {{ formData.isItEditable }}
-              </td>
+              <td style="width: 35%">{{ formData.isItEditable }}</td>
               <th style="width: 10%">是否隐藏号码</th>
               <td colspan="5" style="width: 45%">
                 {{ formData.doYouHideNumbers }}
@@ -62,17 +56,13 @@
               <th>国家地区</th>
               <td>{{ formData.nationalArea }}</td>
               <th>护照号</th>
-              <td colspan="5">
-                {{ formData.passportNo }}
-              </td>
+              <td colspan="5">{{ formData.passportNo }}</td>
             </tr>
             <tr>
               <th>身份证号</th>
               <td>{{ formData.idNumber }}</td>
               <th>身份证照片</th>
-              <td colspan="5">
-                {{ formData.iDCardPhoto }}
-              </td>
+              <td colspan="5">{{ formData.iDCardPhoto }}</td>
             </tr>
             <tr>
               <th>籍贯</th>
@@ -84,9 +74,7 @@
               <th>英文名</th>
               <td>{{ formData.englishName }}</td>
               <th>婚姻状况</th>
-              <td colspan="5">
-                {{ formData.maritalStatus }}
-              </td>
+              <td colspan="5">{{ formData.maritalStatus }}</td>
             </tr>
             <tr>
               <th>员工照片</th>
@@ -104,54 +92,38 @@
               <th>星座</th>
               <td>{{ formData.constellation }}</td>
               <th>血型</th>
-              <td colspan="5">
-                {{ formData.bloodType }}
-              </td>
+              <td colspan="5">{{ formData.bloodType }}</td>
             </tr>
             <tr>
               <th>户籍所在地</th>
               <td>{{ formData.domicile }}</td>
               <th>政治面貌</th>
-              <td colspan="5">
-                {{ formData.politicalOutlook }}
-              </td>
+              <td colspan="5">{{ formData.politicalOutlook }}</td>
             </tr>
             <tr>
               <th>入党时间</th>
               <td>{{ formData.timeToJoinTheParty }}</td>
               <th>存档机构</th>
-              <td colspan="5">
-                {{ formData.archivingOrganization }}
-              </td>
+              <td colspan="5">{{ formData.archivingOrganization }}</td>
             </tr>
             <tr>
               <th>子女状态</th>
               <td>{{ formData.stateOfChildren }}</td>
               <th>子女有无商业保险</th>
               <td colspan="5">
-                {{
-                  formData.doChildrenHaveCommercialInsurance
-                }}
+                {{ formData.doChildrenHaveCommercialInsurance }}
               </td>
             </tr>
             <tr>
               <th>有无违法违纪行为</th>
-              <td>
-                {{
-                  formData.isThereAnyViolationOfLawOrDiscipline
-                }}
-              </td>
+              <td>{{ formData.isThereAnyViolationOfLawOrDiscipline }}</td>
               <th>有无重大病史</th>
               <td colspan="5">
-                {{
-                  formData.areThereAnyMajorMedicalHistories
-                }}
+                {{ formData.areThereAnyMajorMedicalHistories }}
               </td>
             </tr>
             <tr class="title">
-              <td colspan="8" class="centInfo">
-                通讯信息
-              </td>
+              <td colspan="8" class="centInfo">通讯信息</td>
             </tr>
             <tr>
               <th>QQ</th>
@@ -163,106 +135,72 @@
               <th>居住证城市</th>
               <td>{{ formData.residenceCardCity }}</td>
               <th>居住证办理日期</th>
-              <td colspan="5">
-                {{ formData.dateOfResidencePermit }}
-              </td>
+              <td colspan="5">{{ formData.dateOfResidencePermit }}</td>
             </tr>
             <tr>
               <th>居住证截止日期</th>
-              <td>
-                {{ formData.residencePermitDeadline }}
-              </td>
+              <td>{{ formData.residencePermitDeadline }}</td>
               <th>现居住地</th>
-              <td colspan="5">
-                {{ formData.placeOfResidence }}
-              </td>
+              <td colspan="5">{{ formData.placeOfResidence }}</td>
             </tr>
             <tr>
               <th>通讯地址</th>
               <td>{{ formData.postalAddress }}</td>
               <th>联系手机</th>
-              <td colspan="5">
-                {{ formData.contactTheMobilePhone }}
-              </td>
+              <td colspan="5">{{ formData.contactTheMobilePhone }}</td>
             </tr>
             <tr>
               <th>个人邮箱</th>
               <td>{{ formData.personalMailbox }}</td>
               <th>紧急联系人</th>
-              <td colspan="5">
-                {{ formData.emergencyContact }}
-              </td>
+              <td colspan="5">{{ formData.emergencyContact }}</td>
             </tr>
             <tr>
               <th>紧急联系电话</th>
-              <td colspan="7">
-                {{ formData.emergencyContactNumber }}
-              </td>
+              <td colspan="7">{{ formData.emergencyContactNumber }}</td>
             </tr>
             <tr class="title">
-              <td colspan="8" class="centInfo">
-                账号信息
-              </td>
+              <td colspan="8" class="centInfo">账号信息</td>
             </tr>
             <tr>
               <th>社保电脑号</th>
-              <td>
-                {{
-                  formData.socialSecurityComputerNumber
-                }}
-              </td>
+              <td>{{ formData.socialSecurityComputerNumber }}</td>
               <th>公积金账号</th>
-              <td colspan="5">
-                {{ formData.providentFundAccount }}
-              </td>
+              <td colspan="5">{{ formData.providentFundAccount }}</td>
             </tr>
             <tr>
               <th>银行卡号</th>
               <td>{{ formData.bankCardNumber }}</td>
               <th>开户行</th>
-              <td colspan="5">
-                {{ formData.openingBank }}
-              </td>
+              <td colspan="5">{{ formData.openingBank }}</td>
             </tr>
             <tr class="title">
-              <td colspan="8" class="centInfo">
-                教育信息
-              </td>
+              <td colspan="8" class="centInfo">教育信息</td>
             </tr>
             <tr>
               <th>学历类型</th>
               <td>{{ formData.educationalType }}</td>
               <th>毕业学校</th>
-              <td colspan="5">
-                {{ formData.graduateSchool }}
-              </td>
+              <td colspan="5">{{ formData.graduateSchool }}</td>
             </tr>
             <tr>
               <th>入学时间</th>
               <td>{{ formData.enrolmentTime }}</td>
               <th>毕业时间</th>
-              <td colspan="5">
-                {{ formData.graduationTime }}
-              </td>
+              <td colspan="5">{{ formData.graduationTime }}</td>
             </tr>
             <tr>
               <th>专业</th>
               <td>{{ formData.major }}</td>
               <th>毕业证书</th>
-              <td colspan="5">
-                {{ formData.graduationCertificate }}
-              </td>
+              <td colspan="5">{{ formData.graduationCertificate }}</td>
             </tr>
             <tr>
               <th>学位证书</th>
-              <td colspan="7">
-                {{ formData.certificateOfAcademicDegree }}
-              </td>
+              <td colspan="7">{{ formData.certificateOfAcademicDegree }}</td>
             </tr>
             <tr class="title">
-              <td colspan="8" class="centInfo">
-                从业信息
-              </td>
+              <td colspan="8" class="centInfo">从业信息</td>
             </tr>
             <tr>
               <th>上家公司</th>
@@ -275,43 +213,30 @@
               <td>{{ formData.resume }}</td>
               <th>有无竞业限制</th>
               <td colspan="5">
-                {{
-                  formData.isThereAnyCompetitionRestriction
-                }}
+                {{ formData.isThereAnyCompetitionRestriction }}
               </td>
             </tr>
             <tr>
               <th>前公司离职证明</th>
-              <td>
-                {{
-                  formData.proofOfDepartureOfFormerCompany
-                }}
-              </td>
+              <td>{{ formData.proofOfDepartureOfFormerCompany }}</td>
               <th>备注</th>
               <td colspan="5">{{ formData.remarks }}</td>
             </tr>
           </table>
-          <div class="foot">
-            签字：___________日期:___________
-          </div>
+          <div class="foot">签字：___________日期:___________</div>
         </div>
+        <!-- 岗位-详情 -->
         <div v-else>
           <h2 class="centInfo">岗位信息表</h2>
           <table cellspacing="0" width="100%" class="tableList">
             <tr class="title">
-              <td colspan="4" class="centInfo">
-                基本信息
-              </td>
+              <td colspan="4" class="centInfo">基本信息</td>
             </tr>
             <tr>
               <th style="width: 10%">姓名</th>
-              <td style="width: 40%">
-                {{ formData.username }}
-              </td>
+              <td style="width: 40%">{{ formData.username }}</td>
               <th style="width: 10%">入职日期</th>
-              <td style="width: 40%">
-                {{ formData.dateOfEntry }}
-              </td>
+              <td style="width: 40%">{{ formData.dateOfEntry }}</td>
             </tr>
             <tr>
               <th>部门</th>
@@ -354,16 +279,12 @@
               <th>司龄</th>
               <td>{{ formData.ageOfDivision }}</td>
               <th>首次参加工作时间</th>
-              <td>
-                {{ formData.workingTimeForTheFirstTime }}
-              </td>
+              <td>{{ formData.workingTimeForTheFirstTime }}</td>
             </tr>
 
             <tr>
               <th>调整工龄天</th>
-              <td>
-                {{ formData.adjustmentOfLengthOfService }}
-              </td>
+              <td>{{ formData.adjustmentOfLengthOfService }}</td>
               <th>工龄</th>
               <td>{{ formData.workingYears }}</td>
             </tr>
@@ -374,33 +295,19 @@
               <td>{{ formData.correctionEvaluation }}</td>
             </tr>
             <tr class="title">
-              <td colspan="4" class="centInfo">
-                合同信息
-              </td>
+              <td colspan="4" class="centInfo">合同信息</td>
             </tr>
             <tr>
               <th>首次合同开始时间</th>
-              <td>
-                {{ formData.initialContractStartTime }}
-              </td>
+              <td>{{ formData.initialContractStartTime }}</td>
               <th>首次合同结束时间</th>
-              <td>
-                {{
-                  formData.firstContractTerminationTime
-                }}
-              </td>
+              <td>{{ formData.firstContractTerminationTime }}</td>
             </tr>
             <tr>
               <th>现合同开始时间</th>
-              <td>
-                {{ formData.currentContractStartTime }}
-              </td>
+              <td>{{ formData.currentContractStartTime }}</td>
               <th>现合同结束时间</th>
-              <td>
-                {{
-                  formData.closingTimeOfCurrentContract
-                }}
-              </td>
+              <td>{{ formData.closingTimeOfCurrentContract }}</td>
             </tr>
 
             <tr>
@@ -411,20 +318,14 @@
             </tr>
             <tr>
               <th>续签次数</th>
-              <td colspan="3">
-                {{ formData.renewalNumber }}
-              </td>
+              <td colspan="3">{{ formData.renewalNumber }}</td>
             </tr>
             <tr class="title">
-              <td colspan="4" class="centInfo">
-                招聘信息
-              </td>
+              <td colspan="4" class="centInfo">招聘信息</td>
             </tr>
             <tr>
               <th>其他招聘渠道</th>
-              <td>
-                {{ formData.otherRecruitmentChannels }}
-              </td>
+              <td>{{ formData.otherRecruitmentChannels }}</td>
               <th>招聘渠道</th>
               <td>{{ formData.recruitmentChannels }}</td>
             </tr>
@@ -432,22 +333,19 @@
               <th>社招校招</th>
               <td>{{ formData.socialRecruitment }}</td>
               <th>推荐企业人</th>
-              <td>
-                {{ formData.recommenderBusinessPeople }}
-              </td>
+              <td>{{ formData.recommenderBusinessPeople }}</td>
             </tr>
           </table>
-          <div class="foot">
-            签字：___________日期:___________
-          </div>
+          <div class="foot">签字：___________日期:___________</div>
         </div>
       </el-card>
     </div>
   </div>
 </template>
+
 <script>
-import { getPersonalDetailApi } from '@/api/employees'
-import { getUserDetailInfoApi } from '@/api/user'
+import { getPersonalDetail } from '@/api/employees'
+import { getUserDetail } from '@/api/user'
 export default {
   data() {
     return {
@@ -463,10 +361,10 @@ export default {
   // 组件更新
   methods: {
     async getPersonalDetail() {
-      this.formData = await getPersonalDetailApi(this.userId) // 获取个人基本信息
+      this.formData = await getPersonalDetail(this.userId) // 获取个人基本信息
     },
     async getJobDetail() {
-      const userInfo = await getUserDetailInfoApi(this.userId)
+      const userInfo = await getUserDetail(this.userId)
       const jobInfo = await getJobDetail(this.userId) // 获取个人基本信息
       this.formData = { ...userInfo, ...jobInfo }
     },

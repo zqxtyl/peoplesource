@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "SidebarLogo",
+  name: 'SidebarLogo',
   props: {
     collapse: {
       type: Boolean,
@@ -19,11 +19,11 @@ export default {
   },
   data() {
     return {
-      title: "Vue Admin Template",
-      logo: "https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png",
-    };
+      title: 'Vue Admin Template',
+      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -49,11 +49,13 @@ export default {
     height: 100%;
     width: 100%;
 
-    & .sidebar-logo {
+    // 大图样式
+    .sidebar-logo {
       width: 140px;
       vertical-align: middle;
       margin-right: 12px;
     }
+
     & .sidebar-title {
       display: inline-block;
       margin: 0;

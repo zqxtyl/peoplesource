@@ -1,42 +1,58 @@
 import request from '@/utils/request'
 
-// 获取所有角色列表
-export function getAllRolesApi (params){
-    return request({
-        url:'/sys/role',
-        params
-    })
+/**
+ * 获取角色列表
+ */
+export function getRolesApi(params) {
+  return request({
+    url: '/sys/role',
+    params,
+  })
 }
 
-// 根据ID删除角色
-export function deleteRolesApi (id){
-    return request({
-        url:`/sys/role/${id}`,
-        method:'DELETE',
-    })
-}
-//添加角色
-export function addRolesApi (data){
-    return request({
-        url:`/sys/role`,
-        method:'POST',
-        data
-    })
+/**
+ * 添加角色
+ * @param {*} data {name, region}
+ */
+export function addRoleApi(data) {
+  return request({
+    url: '/sys/role',
+    method: 'POST',
+    data,
+  })
 }
 
-// 给角色分配权限
-export function assignPerm(data) {
-    return request({
-      url: '/sys/role/assignPrem',
-      method: 'put',
-      data
-    })
-  }
-  // 根据id获取角色权限
+/**
+ * 通过角色id实现删除
+ * @param {*} id 角色id
+ */
+export function removeRoleApi(id) {
+  return request({
+    url: '/sys/role/' + id,
+    method: 'DELETE',
+  })
+}
+
+/**
+ * 根据id获取角色详情
+ * @param {*} id 角色id
+ * @returns promise
+ */
 export function getRolesInfo(id) {
-    return request({
-      url: '/sys/role/'+id,
-   
-    })
-  }
+  return request({
+    url: '/sys/role/' + id,
+  })
+}
 
+/**
+ * 给角色分配权限
+ * @param {*} data { id, permIds }
+ * @returns promise
+ */
+export function assignPerm(data) {
+  return request({
+    url: '/sys/role/assignPrem',
+    method: 'put',
+    data,
+  })
+}

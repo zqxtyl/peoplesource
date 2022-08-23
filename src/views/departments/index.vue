@@ -1,82 +1,89 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <el-card class="box-card">
+      <el-card v-loading="loading" class="box-card">
         <!-- 头部 -->
-        <TreeTools :treeNode="company" :isRoot='true' @addDepts='dialogVisible=true'></TreeTools>
-        <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all='true'>
-          <template v-slot="{data}">
-            <TreeTools :treeNode='data' @addDepts='showAddDepts' @remove='getDepts' @showEdit='showEdit'></TreeTools>
+        <tree-tools @add="showAddDept" :isRoot="true" :treeNode="company" />
+        <!-- 树形 -->
+        <el-tree :data="treeData" :props="defaultProps" default-expand-all>
+          <!-- 这是作用域插槽 -->
+          <!-- v-slot 获取组件内部slot提供的数据 -->
+          <template v-slot="{ data }">
+            <tree-tools
+              @add="showAddDept"
+              @remove="loadDepts"
+              @edit="showEdit"
+              :treeNode="data"
+            />
           </template>
         </el-tree>
       </el-card>
     </div>
-    <!-- 添加子部门 -->
-    <AddDepts ref="adddepts" :dialogVisible.sync='dialogVisible' :currentTreeNode='currentTreeNode'></AddDepts>
+    <div>
+      {{ $t('hello') }}
+      {{ $t('message.hello') }}
+    </div>
+
+    <!-- 添加部门弹层 -->
+    <add-dept
+      ref="addDept"
+      @add-success="loadDepts"
+      :visible.sync="dialogVisible"
+      :currentNode="currentNode"
+    />
   </div>
 </template>
 
 <script>
-import TreeTools from './component/tree-tools.vue'
-import AddDepts from './component/add-dept.vue'
-import { getDeptsApi } from '@/api/department'
-// import ItemVue from '@/layout/components/Sidebar/Item.vue'
+import TreeTools from "./components/tree-tools.vue";
+import { getDeptsApi } from "@/api/departments";
+import { transListToTree } from "@/utils";
+import AddDept from "./components/add-dept";
 export default {
   data() {
     return {
       treeData: [
-        { name: '总裁办', children: [{ name: '董事会' }] },
-        { name: '行政部' },
-        { name: '人事部' },
+        { name: "总裁办", children: [{ name: "董事会" }] },
+        { name: "行政部" },
+        { name: "人事部" },
       ],
-
       defaultProps: {
-        children: 'children',
-        label: 'name',
+        label: "name", // 将data中哪个数据名显示到树形页面中
+        // children: 'child', // 树形默认查找子节点通过childten
       },
-      company: { name: '总裁办', children: [{ name: '董事会' }] },
-      dialogVisible: false, // 控制添加弹层是否显示
-      currentTreeNode: {},
-    }
+      company: { name: "传智教育", manager: "负责人" },
+      dialogVisible: false,
+      currentNode: {},
+      loading: false,
+    };
   },
-  components: { TreeTools, AddDepts },
+
+  components: {
+    TreeTools,
+    AddDept,
+  },
+
   created() {
-    this.getDepts()
+    this.loadDepts();
   },
 
   methods: {
-    handleNodeClick(data) {
-      console.log(data)
+    async loadDepts() {
+      this.loading = true;
+      const res = await getDeptsApi();
+      this.treeData = transListToTree(res.depts, "");
+      this.loading = false;
     },
-    async getDepts() {
-      const res = await getDeptsApi()
-      // console.log(res)
-      this.treeData = this.transListToTree(res.depts, '')
+    showAddDept(val) {
+      this.dialogVisible = true;
+      this.currentNode = val;
     },
-    transListToTree(data, pid) {
-      const arr = []
-      data.forEach((Item) => {
-        if (Item.pid === pid) {
-          const children = this.transListToTree(data, Item.id)
-          if (children.length) {
-            Item.children = children
-          }
-          arr.push(Item)
-        }
-      })
-      return arr
-    },
-    showAddDepts(treeNode) {
-      this.dialogVisible = true
-      this.currentTreeNode = treeNode
-    },
-    showEdit(treeNode) {
-      this.currentTreeNode = treeNode
-      this.dialogVisible = true
-      this.$refs.adddepts.getDeptsInfoById(treeNode.id)
+    showEdit(val) {
+      this.dialogVisible = true;
+      this.$refs.addDept.getDeptById(val.id);
     },
   },
-}
+};
 </script>
 
 <style scoped lang="less"></style>

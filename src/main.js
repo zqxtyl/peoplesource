@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+import '@/styles/test.scss'
 
 import App from './App'
 import store from './store'
@@ -15,58 +16,74 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 // 自定义指令
-import * as directives from '@/directive/index.js'
-// 遍历所有的导出的指令对象 完成自定义全局注册
-Object.keys(directives).forEach(key => {
-  // 注册自定义指令
-  Vue.directive(key, directives[key])
-})
+import * as directives from '@/directives'
+// 组件
+import components from '@/components'
+// 过滤器封装
+import * as filters from '@/filters'
 import Print from 'vue-print-nb'
-// Global instruction 
-Vue.use(Print);
+// console.log(Print)
 
-// 同一注册过滤器
- import * as filters from '@/filters/index.js'
- for(let key in filters){
-  console.log(key)
-   Vue.filter(key,filters[key])
+import i18n from '@/i18n'
+// import VueI18n from 'vue-i18n'
+// Vue.use(VueI18n)
+// const message={
+//   en:{
+//     message:{
+//       hello:'helloe world'
+//     },
+//     hello:'世界你好'
+//   },
+//   zh:{
+//     message:{
+//       hello:"世界你好"
+//     },
+//     hello:'世界你好'
+//   }
+// }
 
- }
-// Object.keys(filters).forEach(key=>{
-//   Vue.filter(key,filters[key])
+// const i18n=new VueI18n({
+//   locale:'zh',//地区
+//   message//地区信息
 // })
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online ! ! !
- */
-// 利用mock模拟假数据
+
+Vue.use(Print)
+
+// 统一注册过滤器
+for (let key in filters) {
+  Vue.filter(key, filters[key])
+}
+// 统一注册组件
+Vue.use(components)
+// 统一注册自定义指令
+for (let key in directives) {
+  Vue.directive(key, directives[key])
+}
+
+// mock假数据
 if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
+
 // 注册element ui
-Vue.use(ElementUI, { locale } )
+Vue.use(ElementUI, {
+  i18n:(key,value)=>i18n.t(key,value)
+})
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
-// production 生产  打包上线 （除掉一些报错）
-// dev :devwlopment 开发
-// test 测试
 
-// 引入全局组件
-import components from '@/components'
-Vue.use(components)
-
-
+// dev: development 开发
+// test: 测试
+// production 生产
 Vue.config.productionTip = false
-
+// 参数1: 自定义指令的名字: 不需要+v-
+// 参数2: 是配置对象
 
 new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  i18n,
+  render: (h) => h(App),
 })

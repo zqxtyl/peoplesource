@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
-// 引入cookies 方便了对cookies的操作
+// 封装了操作cookie的方法
+// 操作cookie的原生方法比较麻烦
 const TokenKey = 'vue_admin_template_token'
 
 export function getToken() {
@@ -15,9 +16,9 @@ export function removeToken() {
 }
 
 export function setTokenTime() {
-  return Cookies.set("setTokenTime", Date.now())
+  Cookies.set('tokenTime', Date.now())
 }
 
 export function getTokenTime() {
-  return Cookies.get('setTokenTime')
+  return Cookies.get('tokenTime')
 }
